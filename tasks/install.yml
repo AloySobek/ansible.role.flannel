@@ -1,0 +1,25 @@
+# File              : install.yml
+# Author            : Rustam Khafizov <super.rustamm@gmail.com>
+# Date              : 16.09.2020
+# Last Modified Date: 16.09.2020
+# Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
+
+---
+- name: updating before installing
+  become: true
+  apt:
+    update_cache: true
+    cache_valid_time: 0
+    force_apt_get: true
+    upgrade: dist
+
+- name: downloading flannel binaries
+  become: true
+  get_url:
+    url: "https://github.com/coreos/flannel/releases/download/v{{ verions }}/flannel-v{{ version }}-linux-amd64.tar.gz"
+    dest: "/tmp/flannel.tar.gz"
+    mode: 0644
+    owner: root
+
+- name: installing flannel binaries
+  become: true

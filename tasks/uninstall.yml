@@ -1,0 +1,45 @@
+# File              : uninstall.yml
+# Author            : Rustam Khafizov <super.rustamm@gmail.com>
+# Date              : 25.09.2020
+# Last Modified Date: 26.09.2020
+# Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
+
+---
+- name: stopping flannel daemon
+  become: true
+  systemd:
+    name: flannel
+    state: stopped
+    enabled: false
+
+- name: removing flannel binaries
+  become: true
+  file:
+    path: "/usr/bin/flanneld"
+    state: absent
+
+- name: removing flannel network config from etcd storage
+  become: true
+  etcd3:
+    key: "{{ etcd_prefix | default('/coreos.com/network') }}/config"
+    value: |
+      {{ etcd_config }}
+    state: absent
+    host: "{{ etcd_endpoints | raw_ip() }}"
+    port: "{{ etcd_endpoints | raw_ip('port') }}"
+    ca_cert: "{{ etcd_cafile }}"
+    client_cert: "{{ etcd_certfile }}"
+    client_key: "{{ etcd_keyfile }}"
+  when: etcd_config
+
+- name: removing flannel service
+  become: true
+  file:
+    path: "/etc/systemd/system/flannel.service"
+    state: absent
+
+- name: cleaning after removing
+  become: true
+  apt:
+    autoremove: true
+    autoclean: true

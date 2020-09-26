@@ -1,38 +1,52 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role installing and configuring flannel overlay network as linux service ( starting and enabling it )
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Actually flannel network config is putting to etcd_v3 cluster but flannel does not support it, so you need to put this config manually in etcd_v2 ( you may ask - but why you put this config anyway? Well... i'm just hoping that flannel will be use etcd_v3 in the future )
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- state: 'install', 'uninstall'
+- version: version of flannel to download
+- flannel_args: just copy of terminal flannel flags, see example
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- ansible.community 'etcd3' module
+- ansible.role.etcd (By AloySobek for example)
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - name: how to install flannel - example
+      hosts: example
       roles:
-         - { role: username.rolename, x: 42 }
+         - ansible.role.flannel
+      vars:
+        state: install
+        version: "0.12.0"
+        network_config: |
+          {
+            "Network": "10.10.0.0/16",
+            "SubnetLen": 24,
+            "Backend": {
+              "Type": "vxlan"
+            }
+          }
+        etcd_cafile: "/path/to/ca-cert"
+        etcd_certfile: "/path/to/cert"
+        etcd_keyfile: "/path/to/cert-key""
+        etcd_endpoints: "https://localhost:2379"
+        ip_masq: true
 
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+MIT

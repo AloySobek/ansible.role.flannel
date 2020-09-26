@@ -1,2 +1,14 @@
+# File              : main.yml
+# Author            : Rustam Khafizov <super.rustamm@gmail.com>
+# Date              : 25.09.2020
+# Last Modified Date: 25.09.2020
+# Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
+
 ---
-# handlers file for ./
+- name: enable flannel
+  become: true
+  systemd:
+    name: flannel
+    state: started
+    enabled: true
+    daemon_reload: true

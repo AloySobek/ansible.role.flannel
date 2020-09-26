@@ -1,5 +1,5 @@
 [Unit]
-Description=Network fabric for containers
+Description=Overlay network for kubernetes
 Documentation=https://github.com/coreos/flannel
 After=network.target
 After=network-online.target
@@ -11,7 +11,8 @@ Before=docker.service
 Type=notify
 Restart=always
 RestartSec=5
-ExecStart=/usr/local/bin/flanneld 
+ExecStart=/usr/bin/flanneld{% if etcd_cafile %} -etcd-cafile {{ etcd_cafile }}{% endif %}{% if etcd_certfile %} -etcd-certfile {{ etcd_certfile }}{% endif %}{% if etcd_endpoints %} -etcd-endpoints {{ etcd_endpoints }}{% endif %}{% if etcd_keyfile %} -etcd-keyfile {{ etcd_keyfile }}{% endif %}{% if etcd_password %} -etcd-password {{ etcd_password }}{% endif %}{% if etcd_prefix %} -etcd-prefix {{ etcd_prefix }}{% endif %}{% if etcd_username %} -etcd-username {{ etcd_username }}{% endif %}{% if healthz_ip %} -healthz-ip {{ healthz_ip }}{% endif %}{% if healthz_port %} -healthz-port {{ healthz_port }}{% endif %}{% if iface %} -iface {{ iface }}{% endif %}{% if iface_regex %} -iface-regex {{ iface_regex }}{% endif %}{% if ip_masq %} -ip-masq {{ ip_masq }}{% endif %}{% if iptables_forward_rules %} -iptables-forward-rules {{ iptables_forward_rules }}{% endif %}{% if iptables_resync %} -iptables-resync {{ iptables_resync }}{% endif %}{% if kube_annotation_prefix %} -kube-annotation-prefix{{ kube_annotation_prefix }}{% endif %}{% if kube_api_url %} -kube-api-url {{ kube_api_url }}{% endif %}{% if kube_subnet_mgr %} -kube-subnet-mgr {{ kube_subnet_mgr }}{% endif %}{% if kubeconfig_file %} -kubeconfig-file {{ kubeconfig_file }}{% endif %}{% if log_backtrace_at %} -log_backtrace_at {{ log_backtrace_at }}{% endif %}{% if net_config_path %} -net-config-path {{ net_config_path }}{% endif %}{% if public_ip %} -public-ip {{ public_ip }}{% endif %}{% if subnet_file %} -subnet-file {{ subnet_file }}{% endif %}{% if subnet_lease_renew_margin %} -subnet-lease-renew-margin {{ subnet_lease_renew_margin }}{% endif %}{% if v %} -v {{ v }}{% endif %}{% if vmodule %} -vmodule {{ vmodule }}{% endif %}
+
 
 [Install]
 WantedBy=multi-user.target

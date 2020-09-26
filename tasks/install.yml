@@ -1,7 +1,7 @@
 # File              : install.yml
 # Author            : Rustam Khafizov <super.rustamm@gmail.com>
 # Date              : 16.09.2020
-# Last Modified Date: 16.09.2020
+# Last Modified Date: 25.09.2020
 # Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
 
 ---
@@ -16,10 +16,28 @@
 - name: downloading flannel binaries
   become: true
   get_url:
-    url: "https://github.com/coreos/flannel/releases/download/v{{ verions }}/flannel-v{{ version }}-linux-amd64.tar.gz"
+    url: "https://github.com/coreos/flannel/releases/download/v{{ version }}/flannel-v{{ version }}-linux-amd64.tar.gz"
     dest: "/tmp/flannel.tar.gz"
     mode: 0644
     owner: root
 
+- name: unpacking flannel binaries
+  become: true
+  unarchive:
+    src: "/tmp/flannel.tar.gz"
+    dest: "/tmp"
+    remote_src: true
+
+- name: installing pip dependencies
+  become: true
+  pip:
+    name: etcd3
+
 - name: installing flannel binaries
   become: true
+  copy:
+    src: "/tmp/flanneld"
+    dest: "/usr/bin"
+    owner: root
+    mode: 0755
+    remote_src: true

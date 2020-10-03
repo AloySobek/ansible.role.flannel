@@ -1,4 +1,4 @@
-Role Name
+ansible.role.flannel
 =========
 
 This role installing and configuring flannel overlay network as linux service ( starting and enabling it )
@@ -13,7 +13,13 @@ Role Variables
 
 - state: 'install', 'uninstall'
 - version: version of flannel to download
-- flannel_args: just copy of terminal flannel flags, see example
+- service_file: path to service file
+- network_config_file: path to network config file
+- etcd_prefix: for example "/coreos.com/network"
+- etcd_cafile: path to ca file
+- etcd_certfile: path to cert file
+- etcd_endpoints: etcd endpoints comma separated
+- etcd_keyfile: path to key file
 
 Dependencies
 ------------
@@ -24,7 +30,6 @@ Dependencies
 Example Playbook
 ----------------
 
-
     - name: how to install flannel - example
       hosts: example
       roles:
@@ -32,19 +37,12 @@ Example Playbook
       vars:
         state: install
         version: "0.12.0"
-        network_config: |
-          {
-            "Network": "10.10.0.0/16",
-            "SubnetLen": 24,
-            "Backend": {
-              "Type": "vxlan"
-            }
-          }
+        service_file: "./services/flannel.service"
+        network_config_file: "./configs/config.json"
         etcd_cafile: "/path/to/ca-cert"
         etcd_certfile: "/path/to/cert"
         etcd_keyfile: "/path/to/cert-key""
         etcd_endpoints: "https://localhost:2379"
-        ip_masq: true
 
 License
 -------

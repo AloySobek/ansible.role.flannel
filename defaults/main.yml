@@ -1,39 +1,20 @@
 # File              : main.yml
 # Author            : Rustam Khafizov <super.rustamm@gmail.com>
 # Date              : 16.09.2020
-# Last Modified Date: 26.09.2020
+# Last Modified Date: 03.10.2020
 # Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
 
 ---
 state: "install"
 version: "0.12.0"
+service_file: false
 
 # Flannel network configuration for etcd
-network_config:
+network_config_file: false
 
-# Flannel command line parameters
+# Credentials for etcd
+etcd_prefix: "/coreos.com/network"
 etcd_cafile:
 etcd_certfile:
 etcd_endpoints:
 etcd_keyfile:
-etcd_password:
-etcd_prefix:
-etcd_username:
-healthz_ip:
-healthz_port:
-iface:
-iface_regex:
-ip_masq:
-iptables_forward_rules:
-iptables_resync:
-kube_annotation_prefix:
-kube_api_url:
-kube_subnet_mgr:
-kubeconfig_file:
-log_backtrace_at:
-net_config_path:
-public_ip:
-subnet_file:
-subnet_lease_renew_margin:
-vmodule:
-v:

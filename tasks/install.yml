@@ -1,7 +1,7 @@
 # File              : install.yml
 # Author            : Rustam Khafizov <super.rustamm@gmail.com>
 # Date              : 16.09.2020
-# Last Modified Date: 25.09.2020
+# Last Modified Date: 03.10.2020
 # Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
 
 ---
@@ -28,10 +28,11 @@
     dest: "/tmp"
     remote_src: true
 
-- name: installing pip dependencies
+- name: installing python etcd3
   become: true
   pip:
     name: etcd3
+  when: network_config_file
 
 - name: installing flannel binaries
   become: true

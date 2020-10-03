@@ -1,28 +1,28 @@
 # File              : configure.yml
 # Author            : Rustam Khafizov <super.rustamm@gmail.com>
 # Date              : 25.09.2020
-# Last Modified Date: 26.09.2020
+# Last Modified Date: 03.10.2020
 # Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
 
 ---
 - name: putting flannel network config into etcd3 storage
   become: true
   etcd3:
-    key: "{{ etcd_prefix | default('/coreos.com/network') }}/config"
+    key: "{{ etcd_prefix }}/config"
     value: |
-      {{ network_config }}
+      {{ lookup('file', '{{ network_config_file }}') }}
     state: present
     host: "{{ etcd_endpoints | raw_ip() }}"
     port: "{{ etcd_endpoints | raw_ip('port') }}"
     ca_cert: "{{ etcd_cafile }}"
     client_cert: "{{ etcd_certfile }}"
     client_key: "{{ etcd_keyfile }}"
-  when: etcd_config
+  when: network_config_file
 
 - name: installing flannel service
   become: true
   template:
-    src: flannel.service
+    src: "{{ service_file }}"
     dest: "/etc/systemd/system"
     mode: 0644
     owner: root

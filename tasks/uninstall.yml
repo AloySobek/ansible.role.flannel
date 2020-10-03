@@ -1,7 +1,7 @@
 # File              : uninstall.yml
 # Author            : Rustam Khafizov <super.rustamm@gmail.com>
 # Date              : 25.09.2020
-# Last Modified Date: 03.10.2020
+# Last Modified Date: 04.10.2020
 # Last Modified By  : Rustam Khafizov <super.rustamm@gmail.com>
 
 ---
@@ -37,9 +37,3 @@
   file:
     path: "/etc/systemd/system/flannel.service"
     state: absent
-
-- name: cleaning after removing
-  become: true
-  apt:
-    autoremove: true
-    autoclean: true
